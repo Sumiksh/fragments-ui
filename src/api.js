@@ -28,3 +28,41 @@ export async function getUserFragments(user) {
     console.error('Unable to call GET /v1/fragment', { err });
   }
 }
+
+
+export async function postFetch(user) {
+  const submitBtn = document.getElementById('submitBtn'); // Get the submit button
+  const searchInput = document.getElementById('search'); // Get the input field
+
+  submitBtn.onclick = async (event) => {
+    event.preventDefault(); 
+    const inputValue = searchInput.value; 
+
+    try {
+      const response = await fetch(`${apiUrl}/v1/fragments`, {
+        method: 'POST',
+        headers: {
+          //'Content-Type': 'application/json',
+          'Content-Type': 'text/plain', 
+          'Authorization': `Bearer ${user.idToken}` 
+        },
+        //body: JSON.stringify({ query: inputValue }) 
+        body: inputValue
+      });
+
+      // Check if the response is OK
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json(); // Parse the JSON response
+      console.log('Response data:', data); // Log response data
+
+      // Optionally, update the UI or handle the response data here
+    } catch (error) {
+      console.error('Error:', error); // Handle errors like network issues
+      alert('An error occurred while processing your request.');
+    }
+  }
+}
+

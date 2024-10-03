@@ -1,10 +1,12 @@
 // src/app.js
 
 import { Auth, getUser } from './auth';
-import { getUserFragments } from './api';
+import { getUserFragments, postFetch } from './api';
+
 async function init() {
   // Get our UI elements
   const userSection = document.querySelector('#user');
+  //onst postSection = document.querySelector('#postreq');
   const loginBtn = document.querySelector('#login');
   const logoutBtn = document.querySelector('#logout');
 
@@ -25,6 +27,7 @@ async function init() {
   if (!user) {
     // Disable the Logout button
     logoutBtn.disabled = true;
+    //postSection.hidden = true;
     return;
   }
 
@@ -33,6 +36,7 @@ async function init() {
 
   // Update the UI to welcome the user
   userSection.hidden = false;
+  //postSection.hidden = false;
 
   // Show the user's username
   userSection.querySelector('.username').innerText = user.username;
@@ -43,6 +47,7 @@ async function init() {
 
     // Do an authenticated request to the fragments API server and log the result
     const userFragments = await getUserFragments(user);
+    const postSubmit = await postFetch(user);
 }
 
 // Wait for the DOM to be ready, then start the app
