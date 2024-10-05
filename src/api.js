@@ -37,14 +37,15 @@ export async function postFetch(user) {
   submitBtn.onclick = async (event) => {
     event.preventDefault(); 
     const inputValue = searchInput.value; 
-
+    console.log('Input value:', inputValue, typeof inputValue);
     try {
       const response = await fetch(`${apiUrl}/v1/fragments`, {
         method: 'POST',
         headers: {
           //'Content-Type': 'application/json',
           'Content-Type': 'text/plain', 
-          'Authorization': `Bearer ${user.idToken}` 
+          'Authorization': `Bearer ${user.idToken}`
+          //headers: user.authorizationHeaders() 
         },
         //body: JSON.stringify({ query: inputValue }) 
         body: inputValue
