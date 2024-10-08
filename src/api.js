@@ -31,8 +31,8 @@ export async function getUserFragments(user) {
 
 
 export async function postFetch(user) {
-  const submitBtn = document.getElementById('submitBtn'); // Get the submit button
-  const searchInput = document.getElementById('search'); // Get the input field
+  const submitBtn = document.getElementById('submitBtnPost'); // Get the submit button
+  const searchInput = document.getElementById('searchPost'); // Get the input field
 
   submitBtn.onclick = async (event) => {
     event.preventDefault(); 
@@ -67,3 +67,56 @@ export async function postFetch(user) {
   }
 }
 
+
+export async function getFragmentById(user) {
+  const submitBtn = document.getElementById('submitBtnGetByID'); // Get the submit button
+  const fragmentById = document.getElementById('searchgetById');
+  submitBtn.onclick = async (event) => {
+    const fragmentId = fragmentById.value;
+    event.preventDefault();
+    try {
+      const response = await fetch(`${apiUrl}/v1/fragments/${fragmentId}`, {
+        headers: {
+          //headers: user.authorizationHeaders(),
+          'Content-Type': 'text/plain', 
+          'Authorization': `Bearer ${user.idToken}`
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+      const data = await response.json();
+      console.log("Successfully got fragment by id", data)
+    } catch (error) {
+      console.error('Error:', error); // Handle errors like network issues
+      alert('An error occurred while processing your request.');
+    }
+  }
+}
+
+
+export async function getFragments(user) {
+  const submitBtn = document.getElementById('submitBtnGet'); 
+  submitBtn.onclick = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(`${apiUrl}/v1/fragments`, {
+        headers: {
+          //headers: user.authorizationHeaders(),
+          'Content-Type': 'text/plain', 
+          'Authorization': `Bearer ${user.idToken}`
+        }
+      })
+
+      if (!response.ok) {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+      const data = await response.json();
+      console.log("getFragments", data)
+    } catch (error) {
+      console.error('Error:', error); // Handle errors like network issues
+      alert('An error occurred while processing your request.');
+    }
+  }
+}
