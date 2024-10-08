@@ -87,6 +87,13 @@ export async function getFragmentById(user) {
         throw new Error(`${response.status} ${response.statusText}`);
       }
       const data = await response.json();
+      const fragmentContainer = document.getElementById('individual-fragment');
+      fragmentContainer.innerHTML = ''; // Clear previous data
+      if(data.length === 0) {
+        fragmentContainer.innerHTML = '<p>No fragments found</p>';
+        return;
+      }
+      fragmentContainer.innerHTML = JSON.stringify(data.fragment)
       console.log("Successfully got fragment by id", data)
     } catch (error) {
       console.error('Error:', error); // Handle errors like network issues
@@ -108,12 +115,19 @@ export async function getFragments(user) {
           'Authorization': `Bearer ${user.idToken}`
         }
       })
-
       if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}`);
       }
       const data = await response.json();
       console.log("getFragments", data)
+      // Display the fragments on the page
+      const fragmentContainer = document.getElementById('fragment-list');
+      fragmentContainer.innerHTML = ''; // Clear previous data
+      if(data.length === 0) {
+        fragmentContainer.innerHTML = '<p>No fragments found</p>';
+        return;
+      }
+      fragmentContainer.innerHTML = data.fragmentList
     } catch (error) {
       console.error('Error:', error); // Handle errors like network issues
       alert('An error occurred while processing your request.');
