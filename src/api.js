@@ -44,11 +44,8 @@ export async function postFetch(user) {
       const response = await fetch(`${apiUrl}/v1/fragments`, {
         method: 'POST',
         headers: {
-          //'Content-Type': 'application/json',
-          //'Content-Type': 'text/plain',
           'Content-Type': selectedContentType, 
           'Authorization': `Bearer ${user.idToken}`
-          //headers: user.authorizationHeaders() 
         },
         //body: JSON.stringify({ query: inputValue }) 
         body:  selectedContentType === 'application/json' 
@@ -74,41 +71,37 @@ export async function postFetch(user) {
 
 
 export async function getFragmentById(user) {
-  const submitBtn = document.getElementById('submitBtnGetByID'); 
+  const submitBtn = document.getElementById('submitBtnGetByID');
   const fragmentById = document.getElementById('searchgetById');
 
   const fragmentId = fragmentById.value; // e.g., "12345.json" or "67890.text"
 
-// Split the fragmentId at the dot
-const [id, contentTypeSuffix] = fragmentId.split('.');
+  // Split the fragmentId at the dot
+  const [id, contentTypeSuffix] = fragmentId.split('.');
 
-// Determine the content type using if statements
-let contentType;
-if (contentTypeSuffix === 'json') {
-  contentType = 'application/json';
-} else if (contentTypeSuffix === 'text') {
-  contentType = 'text/plain';
-} else if (contentTypeSuffix === 'html') {
-  contentType = 'text/html';
-} else if (contentTypeSuffix === 'md') {
-  contentType = 'text/markdown';
-} else {
-  contentType = 'text/plain'; // Fallback content type
-}
+  // Determine the content type using if statements
+  let contentType;
+  if (contentTypeSuffix === 'json') {
+    contentType = 'application/json';
+  } else if (contentTypeSuffix === 'text') {
+    contentType = 'text/plain';
+  } else if (contentTypeSuffix === 'html') {
+    contentType = 'text/html';
+  } else if (contentTypeSuffix === 'md') {
+    contentType = 'text/markdown';
+  } else {
+    contentType = 'text/plain'; // Fallback content type
+  }
 
 
   submitBtn.onclick = async (event) => {
     const fragmentId = fragmentById.value;
     console.log('Fragment ID:', fragmentId);
-
-    
     event.preventDefault();
-
+    
     try {
       const response = await fetch(`${apiUrl}/v1/fragments/${fragmentId}`, {
         headers: {
-          //headers: user.authorizationHeaders(),
-          // 'Content-Type': 'text/markdown', 
           'Content-Type': contentTypeSuffix,
           'Authorization': `Bearer ${user.idToken}`
         }
@@ -119,17 +112,17 @@ if (contentTypeSuffix === 'json') {
       }
 
       const data = await response.json();
-      console.log('returned final', data);
+      console.log('returned final', data , typeof data);
       const fragmentContainer = document.getElementById('individual-fragment');
-      fragmentContainer.innerHTML = ''; 
+      fragmentContainer.innerHTML = '';
 
-      if(data.length === 0) {
+      if (data.length === 0) {
         fragmentContainer.innerHTML = '<p>No fragments found</p>';
         return;
       }
 
-      fragmentContainer.innerHTML = JSON.stringify(data.fragment)
-      console.log("Successfully got fragment by id", data)
+      fragmentContainer.innerHTML = JSON.stringify(data)
+      console.log("Successfully got fragment by id :", data)
     } catch (error) {
       console.error('Error:', error); // Handle errors like network issues
       alert('An error occurred while processing your request.');
