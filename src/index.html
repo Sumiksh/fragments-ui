@@ -124,6 +124,12 @@
         <div class="box-content">
           <label>Send POST request</label>
           <input type="text" id="searchPost" placeholder="Add fragment" />
+          FROM : <select id="contentTypeSelect">
+            <option value="text/plain">Text</option>
+            <option value="text/markdown">Markdown</option>
+            <option value="application/json">JSON</option>
+            <option value="text/html">HTML</option>
+          </select>
           <input type="submit" id="submitBtnPost" value="Submit" />
         </div>
       </div>

@@ -33,22 +33,27 @@ export async function getUserFragments(user) {
 export async function postFetch(user) {
   const submitBtn = document.getElementById('submitBtnPost'); // Get the submit button
   const searchInput = document.getElementById('searchPost'); // Get the input field
+  const contentTypeSelect = document.getElementById('contentTypeSelect');
 
   submitBtn.onclick = async (event) => {
     event.preventDefault(); 
     const inputValue = searchInput.value; 
-    console.log('Input value:', inputValue, typeof inputValue);
+    const selectedContentType = contentTypeSelect.value;
+    console.log('Input value:', inputValue, typeof inputValue, selectedContentType , typeof selectedContentType);
     try {
       const response = await fetch(`${apiUrl}/v1/fragments`, {
         method: 'POST',
         headers: {
           //'Content-Type': 'application/json',
-          'Content-Type': 'text/plain', 
+          //'Content-Type': 'text/plain',
+          'Content-Type': selectedContentType, 
           'Authorization': `Bearer ${user.idToken}`
           //headers: user.authorizationHeaders() 
         },
         //body: JSON.stringify({ query: inputValue }) 
-        body: inputValue
+        body:  selectedContentType === 'application/json' 
+        ? JSON.stringify({ data: inputValue }) 
+        : inputValue
       });
 
       // Check if the response is OK
@@ -69,16 +74,42 @@ export async function postFetch(user) {
 
 
 export async function getFragmentById(user) {
-  const submitBtn = document.getElementById('submitBtnGetByID'); // Get the submit button
+  const submitBtn = document.getElementById('submitBtnGetByID'); 
   const fragmentById = document.getElementById('searchgetById');
+
+  const fragmentId = fragmentById.value; // e.g., "12345.json" or "67890.text"
+
+// Split the fragmentId at the dot
+const [id, contentTypeSuffix] = fragmentId.split('.');
+
+// Determine the content type using if statements
+let contentType;
+if (contentTypeSuffix === 'json') {
+  contentType = 'application/json';
+} else if (contentTypeSuffix === 'text') {
+  contentType = 'text/plain';
+} else if (contentTypeSuffix === 'html') {
+  contentType = 'text/html';
+} else if (contentTypeSuffix === 'md') {
+  contentType = 'text/markdown';
+} else {
+  contentType = 'text/plain'; // Fallback content type
+}
+
+
   submitBtn.onclick = async (event) => {
     const fragmentId = fragmentById.value;
+    console.log('Fragment ID:', fragmentId);
+
+    
     event.preventDefault();
+
     try {
       const response = await fetch(`${apiUrl}/v1/fragments/${fragmentId}`, {
         headers: {
           //headers: user.authorizationHeaders(),
-          'Content-Type': 'text/plain', 
+          // 'Content-Type': 'text/markdown', 
+          'Content-Type': contentTypeSuffix,
           'Authorization': `Bearer ${user.idToken}`
         }
       })
@@ -86,13 +117,17 @@ export async function getFragmentById(user) {
       if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}`);
       }
+
       const data = await response.json();
+      console.log('returned final', data);
       const fragmentContainer = document.getElementById('individual-fragment');
-      fragmentContainer.innerHTML = ''; // Clear previous data
+      fragmentContainer.innerHTML = ''; 
+
       if(data.length === 0) {
         fragmentContainer.innerHTML = '<p>No fragments found</p>';
         return;
       }
+
       fragmentContainer.innerHTML = JSON.stringify(data.fragment)
       console.log("Successfully got fragment by id", data)
     } catch (error) {

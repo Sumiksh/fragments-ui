@@ -35,6 +35,6 @@
     "aws-amplify": "^5.3.21"
   },
   "optionalDependencies": {
-        "@swc/core-linux-x64-gnu": "^1.2.160"
-    }
+    "@swc/core-linux-x64-gnu": "^1.2.160"
+  }
 }
