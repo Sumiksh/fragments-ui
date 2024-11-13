@@ -52,7 +52,7 @@ export async function postFetch(user) {
         },
         //body: JSON.stringify({ query: inputValue }) 
         body:  selectedContentType === 'application/json' 
-        ? JSON.stringify({ data: inputValue }) 
+        ? JSON.stringify(inputValue) 
         : inputValue
       });
 
