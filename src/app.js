@@ -45,12 +45,11 @@ async function init() {
   // Disable the Login button
   loginBtn.disabled = true;
 
-
-    // Do an authenticated request to the fragments API server and log the result
-    const userFragments = await getUserFragments(user);
-    const postSubmit = await postFetch(user);
-    const getByIdSubmit = await getFragmentById(user);
-    const getByIdSubmit2 = await getFragments(user);
+  // Do an authenticated request to the fragments API server and log the result
+  const userFragments = await getUserFragments(user);
+  const postSubmit = await postFetch(user);
+  const getByIdSubmit = await getFragmentById(user);
+  const getByIdSubmit2 = await getFragments(user);
 }
 
 // Wait for the DOM to be ready, then start the app

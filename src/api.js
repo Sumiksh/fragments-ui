@@ -17,7 +17,7 @@ export async function getUserFragments(user) {
       // earlier, to automatically attach the user's ID token.
       headers: user.authorizationHeaders(),
     });
-    console.log('Auth header is',  user.authorizationHeaders() );
+    console.log('Auth header is', user.authorizationHeaders());
     if (!res.ok) {
       throw new Error(`${res.status} ${res.statusText}`);
     }
@@ -29,28 +29,31 @@ export async function getUserFragments(user) {
   }
 }
 
-
 export async function postFetch(user) {
   const submitBtn = document.getElementById('submitBtnPost'); // Get the submit button
   const searchInput = document.getElementById('searchPost'); // Get the input field
   const contentTypeSelect = document.getElementById('contentTypeSelect');
 
   submitBtn.onclick = async (event) => {
-    event.preventDefault(); 
-    const inputValue = searchInput.value; 
+    event.preventDefault();
+    const inputValue = searchInput.value;
     const selectedContentType = contentTypeSelect.value;
-    console.log('Input value:', inputValue, typeof inputValue, selectedContentType , typeof selectedContentType);
+    console.log(
+      'Input value:',
+      inputValue,
+      typeof inputValue,
+      selectedContentType,
+      typeof selectedContentType
+    );
     try {
       const response = await fetch(`${apiUrl}/v1/fragments`, {
         method: 'POST',
         headers: {
-          'Content-Type': selectedContentType, 
-          'Authorization': `Bearer ${user.idToken}`
+          'Content-Type': selectedContentType,
+          Authorization: `Bearer ${user.idToken}`,
         },
-        //body: JSON.stringify({ query: inputValue }) 
-        body:  selectedContentType === 'application/json' 
-        ? JSON.stringify(inputValue) 
-        : inputValue
+        //body: JSON.stringify({ query: inputValue })
+        body: selectedContentType === 'application/json' ? JSON.stringify(inputValue) : inputValue,
       });
 
       // Check if the response is OK
@@ -66,9 +69,8 @@ export async function postFetch(user) {
       console.error('Error:', error); // Handle errors like network issues
       alert('An error occurred while processing your request.');
     }
-  }
+  };
 }
-
 
 export async function getFragmentById(user) {
   const submitBtn = document.getElementById('submitBtnGetByID');
@@ -93,26 +95,25 @@ export async function getFragmentById(user) {
     contentType = 'text/plain'; // Fallback content type
   }
 
-
   submitBtn.onclick = async (event) => {
     const fragmentId = fragmentById.value;
     console.log('Fragment ID:', fragmentId);
     event.preventDefault();
-    
+
     try {
       const response = await fetch(`${apiUrl}/v1/fragments/${fragmentId}`, {
         headers: {
           'Content-Type': contentTypeSuffix,
-          'Authorization': `Bearer ${user.idToken}`
-        }
-      })
+          Authorization: `Bearer ${user.idToken}`,
+        },
+      });
 
       if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
-      console.log('returned final', data , typeof data);
+      console.log('returned final', data, typeof data);
       const fragmentContainer = document.getElementById('individual-fragment');
       fragmentContainer.innerHTML = '';
 
@@ -121,44 +122,43 @@ export async function getFragmentById(user) {
         return;
       }
 
-      fragmentContainer.innerHTML = JSON.stringify(data)
-      console.log("Successfully got fragment by id :", data)
+      fragmentContainer.innerHTML = JSON.stringify(data);
+      console.log('Successfully got fragment by id :', data);
     } catch (error) {
       console.error('Error:', error); // Handle errors like network issues
       alert('An error occurred while processing your request.');
     }
-  }
+  };
 }
 
-
 export async function getFragments(user) {
-  const submitBtn = document.getElementById('submitBtnGet'); 
+  const submitBtn = document.getElementById('submitBtnGet');
   submitBtn.onclick = async (event) => {
     event.preventDefault();
     try {
       const response = await fetch(`${apiUrl}/v1/fragments`, {
         headers: {
           //headers: user.authorizationHeaders(),
-          'Content-Type': 'text/plain', 
-          'Authorization': `Bearer ${user.idToken}`
-        }
-      })
+          'Content-Type': 'text/plain',
+          Authorization: `Bearer ${user.idToken}`,
+        },
+      });
       if (!response.ok) {
         throw new Error(`${response.status} ${response.statusText}`);
       }
       const data = await response.json();
-      console.log("getFragments", data)
+      console.log('getFragments', data);
       // Display the fragments on the page
       const fragmentContainer = document.getElementById('fragment-list');
       fragmentContainer.innerHTML = ''; // Clear previous data
-      if(data.length === 0) {
+      if (data.length === 0) {
         fragmentContainer.innerHTML = '<p>No fragments found</p>';
         return;
       }
-      fragmentContainer.innerHTML = data.fragmentList
+      fragmentContainer.innerHTML = data.fragmentList;
     } catch (error) {
       console.error('Error:', error); // Handle errors like network issues
       alert('An error occurred while processing your request.');
     }
-  }
+  };
 }
