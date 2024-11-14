@@ -29,6 +29,7 @@ export async function getUserFragments(user) {
   }
 }
 
+
 export async function postFetch(user) {
   const submitBtn = document.getElementById('submitBtnPost'); // Get the submit button
   const searchInput = document.getElementById('searchPost'); // Get the input field
@@ -52,11 +53,9 @@ export async function postFetch(user) {
           'Content-Type': selectedContentType,
           Authorization: `Bearer ${user.idToken}`,
         },
-        //body: JSON.stringify({ query: inputValue })
         body: selectedContentType === 'application/json' ? JSON.stringify(inputValue) : inputValue,
       });
 
-      // Check if the response is OK
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -64,13 +63,23 @@ export async function postFetch(user) {
       const data = await response.json(); // Parse the JSON response
       console.log('Response data:', data); // Log response data
 
-      // Optionally, update the UI or handle the response data here
+      
+      // Display the fragments on the page
+      const fragmentContainer = document.getElementById('dataFromPost');
+      fragmentContainer.innerHTML = ''; // Clear previous data
+      if (data.length === 0) {
+        fragmentContainer.innerHTML = '<p>No fragments found</p>';
+        return;
+      }
+      fragmentContainer.innerHTML =  `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+
     } catch (error) {
       console.error('Error:', error); // Handle errors like network issues
       alert('An error occurred while processing your request.');
     }
   };
 }
+
 
 export async function getFragmentById(user) {
   const submitBtn = document.getElementById('submitBtnGetByID');
@@ -92,7 +101,7 @@ export async function getFragmentById(user) {
   } else if (contentTypeSuffix === 'md') {
     contentType = 'text/markdown';
   } else {
-    contentType = 'text/plain'; // Fallback content type
+    contentType = 'text/plain';
   }
 
   submitBtn.onclick = async (event) => {
@@ -122,10 +131,8 @@ export async function getFragmentById(user) {
         return;
       }
 
-      fragmentContainer.innerHTML = JSON.stringify(data);
-      console.log('Successfully got fragment by id :', data);
+      fragmentContainer.textContent = data;
     } catch (error) {
-      console.error('Error:', error); // Handle errors like network issues
       alert('An error occurred while processing your request.');
     }
   };
@@ -138,7 +145,6 @@ export async function getFragments(user) {
     try {
       const response = await fetch(`${apiUrl}/v1/fragments`, {
         headers: {
-          //headers: user.authorizationHeaders(),
           'Content-Type': 'text/plain',
           Authorization: `Bearer ${user.idToken}`,
         },
@@ -147,17 +153,16 @@ export async function getFragments(user) {
         throw new Error(`${response.status} ${response.statusText}`);
       }
       const data = await response.json();
-      console.log('getFragments', data);
+
       // Display the fragments on the page
       const fragmentContainer = document.getElementById('fragment-list');
-      fragmentContainer.innerHTML = ''; // Clear previous data
+      fragmentContainer.innerHTML = ''; 
       if (data.length === 0) {
         fragmentContainer.innerHTML = '<p>No fragments found</p>';
         return;
       }
-      fragmentContainer.innerHTML = data.fragmentList;
+      fragmentContainer.innerHTML = JSON.stringify(data);
     } catch (error) {
-      console.error('Error:', error); // Handle errors like network issues
       alert('An error occurred while processing your request.');
     }
   };
