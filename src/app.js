@@ -47,9 +47,21 @@ async function init() {
 
   // Do an authenticated request to the fragments API server and log the result
   const userFragments = await getUserFragments(user);
-  const postSubmit = await postFetch(user);
-  const getByIdSubmit = await getFragmentById(user);
-  const getByIdSubmit2 = await getFragments(user);
+
+  submitBtnPost.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    postFetch(user); // Call the function on button click
+  });
+
+  submitBtnGetByID.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    getFragmentById(user); // Call the function on button click
+  });
+
+  submitBtnGet.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    getFragments(user); // Call the function on button click
+  });
 }
 
 // Wait for the DOM to be ready, then start the app

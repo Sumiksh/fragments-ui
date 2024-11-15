@@ -50,4 +50,4 @@ COPY --from=build /app/dist /usr/share/nginx/html
 EXPOSE 80
 
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD -fail - http://localhost:80 || exit 1
+    CMD curl --fail localhost || exit 1

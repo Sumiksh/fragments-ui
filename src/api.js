@@ -29,7 +29,6 @@ export async function getUserFragments(user) {
   }
 }
 
-
 export async function postFetch(user) {
   const submitBtn = document.getElementById('submitBtnPost'); // Get the submit button
   const searchInput = document.getElementById('searchPost'); // Get the input field
@@ -63,7 +62,6 @@ export async function postFetch(user) {
       const data = await response.json(); // Parse the JSON response
       console.log('Response data:', data); // Log response data
 
-      
       // Display the fragments on the page
       const fragmentContainer = document.getElementById('dataFromPost');
       fragmentContainer.innerHTML = ''; // Clear previous data
@@ -71,8 +69,7 @@ export async function postFetch(user) {
         fragmentContainer.innerHTML = '<p>No fragments found</p>';
         return;
       }
-      fragmentContainer.innerHTML =  `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-
+      fragmentContainer.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
     } catch (error) {
       console.error('Error:', error); // Handle errors like network issues
       alert('An error occurred while processing your request.');
@@ -80,16 +77,15 @@ export async function postFetch(user) {
   };
 }
 
-
 export async function getFragmentById(user) {
   const submitBtn = document.getElementById('submitBtnGetByID');
   const fragmentById = document.getElementById('searchgetById');
 
   const fragmentId = fragmentById.value; // e.g., "12345.json" or "67890.text"
-
+  console.log('Fragment ID:', fragmentId);
   // Split the fragmentId at the dot
   const [id, contentTypeSuffix] = fragmentId.split('.');
-
+  console.log('ID:', id, contentTypeSuffix);
   // Determine the content type using if statements
   let contentType;
   if (contentTypeSuffix === 'json') {
@@ -122,7 +118,7 @@ export async function getFragmentById(user) {
       }
 
       const data = await response.json();
-      console.log('returned final', data, typeof data);
+      console.log('returned final', data, typeof data, JSON.stringify(data));
       const fragmentContainer = document.getElementById('individual-fragment');
       fragmentContainer.innerHTML = '';
 
@@ -131,7 +127,7 @@ export async function getFragmentById(user) {
         return;
       }
 
-      fragmentContainer.textContent = data;
+      fragmentContainer.innerHTML = JSON.stringify(data);
     } catch (error) {
       alert('An error occurred while processing your request.');
     }
@@ -156,7 +152,7 @@ export async function getFragments(user) {
 
       // Display the fragments on the page
       const fragmentContainer = document.getElementById('fragment-list');
-      fragmentContainer.innerHTML = ''; 
+      fragmentContainer.innerHTML = '';
       if (data.length === 0) {
         fragmentContainer.innerHTML = '<p>No fragments found</p>';
         return;
