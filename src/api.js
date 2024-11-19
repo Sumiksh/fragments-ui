@@ -96,9 +96,10 @@ export async function getFragmentById(user) {
     contentType = 'text/html';
   } else if (contentTypeSuffix === 'md') {
     contentType = 'text/markdown';
-  } else {
-    contentType = 'text/plain';
-  }
+  } 
+  // else {
+  //   contentType = 'text/plain';
+  // }
 
   submitBtn.onclick = async (event) => {
     const fragmentId = fragmentById.value;
@@ -108,7 +109,7 @@ export async function getFragmentById(user) {
     try {
       const response = await fetch(`${apiUrl}/v1/fragments/${fragmentId}`, {
         headers: {
-          'Content-Type': contentTypeSuffix,
+          'Content-Type': contentTypeSuffix !== undefined ? contentTypeSuffix : 'text/plain',
           Authorization: `Bearer ${user.idToken}`,
         },
       });
@@ -117,7 +118,7 @@ export async function getFragmentById(user) {
         throw new Error(`${response.status} ${response.statusText}`);
       }
 
-      const data = await response.json();
+      const data = contentTypeSuffix !== undefined ?  await response.json() : await response.text();
       console.log('returned final', data, typeof data, JSON.stringify(data));
       const fragmentContainer = document.getElementById('individual-fragment');
       fragmentContainer.innerHTML = '';
