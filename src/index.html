@@ -156,5 +156,27 @@
         </div>
       </div>
     </div>
+
+    <div class="grid-container">
+      <div id="postreq" class="center-box">
+        <div class="box-content">
+          <label>Upload an Image</label>
+          <input type="file" id="imageUpload" accept="image/*" />
+          FROM :
+          <select id="contentTypeSelect">
+            <option value="image/png">PNG</option>
+            <option value="image/jpeg">JPEG</option>
+            <option value="image/webp">WebP</option>
+            <option value="image/avif">AVIF</option>
+            <option value="image/gif">GIF</option>
+          </select>
+          <input type="submit" id="submitBtnPost" value="Submit" />
+          <div id="dataFromPost"></div>
+          <div id="dropArea" style="border: 2px dashed #ccc; padding: 20px; text-align: center; margin-top: 20px;">
+            Drag and drop an image here
+          </div>
+        </div>
+      </div>      
+    </div>
   </body>
 </html>

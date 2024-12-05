@@ -10,9 +10,13 @@ async function init() {
   const loginBtn = document.querySelector('#login');
   const logoutBtn = document.querySelector('#logout');
   //const fragmentId = document.querySelector('#fragmentId');
-  // const submitBtnPost = document.querySelector('#submitBtnPost');
-  // const submitBtnGetByID = document.querySelector('#submitBtnGetByID');
-  // const submitBtnGet = document.querySelector('#submitBtnGet');
+  const submitBtnPost = document.querySelector('#submitBtnPost');
+  const submitBtnGetByID = document.querySelector('#submitBtnGetByID');
+  const submitBtnGet = document.querySelector('#submitBtnGet');
+  const fileInput = document.getElementById('imageUpload');
+  const dropArea = document.getElementById('dropArea');
+  const submitButton = document.getElementById('submitBtnPost');
+  const contentTypeSelect = document.getElementById('contentTypeSelect');
   // Wire up event handlers to deal with login and logout.
   loginBtn.onclick = () => {
     // Sign-in via the Amazon Cognito Hosted UI (requires redirects), see:
@@ -63,6 +67,28 @@ async function init() {
   submitBtnGet.addEventListener('click', (event) => {
     event.preventDefault(); // Prevent the default form submission
     getFragments(user); // Call the function on button click
+  });
+
+  // Drag-and-Drop Handlers
+  dropArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dropArea.style.borderColor = '#000'; // Highlight on dragover
+  });
+
+  dropArea.addEventListener('dragleave', () => {
+    dropArea.style.borderColor = '#ccc'; // Reset border color
+  });
+
+  dropArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    const file = e.dataTransfer.files[0];
+    handleFileUpload(file);
+  });
+
+  // File Input Change Handler
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    handleFileUpload(file);
   });
 }
 
