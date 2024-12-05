@@ -10,9 +10,9 @@ async function init() {
   const loginBtn = document.querySelector('#login');
   const logoutBtn = document.querySelector('#logout');
   //const fragmentId = document.querySelector('#fragmentId');
-  const submitBtnPost = document.querySelector('#submitBtnPost');
-  const submitBtnGetByID = document.querySelector('#submitBtnGetByID');
-  const submitBtnGet = document.querySelector('#submitBtnGet');
+  // const submitBtnPost = document.querySelector('#submitBtnPost');
+  // const submitBtnGetByID = document.querySelector('#submitBtnGetByID');
+  // const submitBtnGet = document.querySelector('#submitBtnGet');
   // Wire up event handlers to deal with login and logout.
   loginBtn.onclick = () => {
     // Sign-in via the Amazon Cognito Hosted UI (requires redirects), see:

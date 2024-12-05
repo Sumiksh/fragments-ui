@@ -78,19 +78,19 @@ export async function postFetch(user) {
 }
 
 export async function getFragmentById(user) {
-  const submitBtn = document.getElementById('submitBtnGetByID');
+  const submitBtn =  document.getElementById('submitBtnGetByID');
   const fragmentById = document.getElementById('searchgetById');
 
-  const fragmentId = fragmentById.value; // e.g., "12345.json" or "67890.text"
+  const fragmentId = await fragmentById.value; // e.g., "12345.json" or "67890.text"
   console.log('Fragment ID:', fragmentId);
   // Split the fragmentId at the dot
-  const [id, contentTypeSuffix] = fragmentId.split('.');
+  const [id, contentTypeSuffix] = await fragmentId.split('.');
   console.log('ID:', id, contentTypeSuffix);
   // Determine the content type using if statements
   let contentType;
   if (contentTypeSuffix === 'json') {
     contentType = 'application/json';
-  } else if (contentTypeSuffix === 'text') {
+  } else if (contentTypeSuffix === 'txt') {
     contentType = 'text/plain';
   } else if (contentTypeSuffix === 'html') {
     contentType = 'text/html';
@@ -102,23 +102,26 @@ export async function getFragmentById(user) {
   // }
 
   submitBtn.onclick = async (event) => {
-    const fragmentId = fragmentById.value;
-    console.log('Fragment ID:', fragmentId);
+    const fragmentId = await fragmentById.value;
+    console.log('check Fragment ID:', fragmentId);
     event.preventDefault();
 
     try {
       const response = await fetch(`${apiUrl}/v1/fragments/${fragmentId}`, {
         headers: {
-          'Content-Type': contentTypeSuffix !== undefined ? contentTypeSuffix : 'text/plain',
+          'Content-Type': contentType,
           Authorization: `Bearer ${user.idToken}`,
         },
       });
-
+      //const res = await response.json()
+      //console.log('Response:', res);
       if (!response.ok) {
+        console.log('Response not ok', response.status, response.statusText);
         throw new Error(`${response.status} ${response.statusText}`);
       }
 
       const data = contentTypeSuffix !== undefined ?  await response.json() : await response.text();
+      //const data = await response.json();
       console.log('returned final', data, typeof data, JSON.stringify(data));
       const fragmentContainer = document.getElementById('individual-fragment');
       fragmentContainer.innerHTML = '';
@@ -128,9 +131,9 @@ export async function getFragmentById(user) {
         return;
       }
 
-      fragmentContainer.innerHTML = JSON.stringify(data);
+      fragmentContainer.innerText = JSON.stringify(data);
     } catch (error) {
-      alert('An error occurred while processing your request.');
+      alert(`An error occurred while processing your request.${error}`);
     }
   };
 }
