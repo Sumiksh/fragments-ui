@@ -1,7 +1,7 @@
 // src/app.js
 
 import { Auth, getUser } from './auth';
-import { getUserFragments, postFetch, getFragmentById, getFragments, uploadImage } from './api';
+import { getUserFragments, postFetch, getFragmentById, getFragments, uploadImage, deleteFragment } from './api';
 
 async function init() {
   // Get our UI elements
@@ -30,6 +30,10 @@ async function init() {
   const dropArea = document.getElementById('dropArea');
   const submitButton = document.getElementById('submitBtnPostImg');
   const contentTypeSelectImg = document.getElementById('contentTypeSelectImg');
+
+  // For delete request
+  const submitBtnDeleteByID=  document.getElementById('submitBtnDeleteByID')
+  const fragmentContainerDelete = document.getElementById('delete-fragment');
   // Wire up event handlers to deal with login and logout.
   loginBtn.onclick = () => {
     // Sign-in via the Amazon Cognito Hosted UI (requires redirects), see:
@@ -103,7 +107,7 @@ async function init() {
       fragmentContainerInd.innerText = JSON.stringify(newData);
     }
   });
-  
+
 
   submitBtnGet.addEventListener('click', async (event) => {
     event.preventDefault(); // Prevent the default form submission
@@ -114,6 +118,19 @@ async function init() {
       return;
     }
     fragmentContainerList.innerHTML = JSON.stringify(data);
+  });
+
+
+  submitBtnDeleteByID.addEventListener('click', async (event) => {
+    event.preventDefault(); // Prevent the default form submission
+    let data = await deleteFragment(user); // Call the function on button click
+    fragmentContainerDelete.innerHTML = '';
+    if (data.length === 0) {
+      fragmentContainerDelete.innerHTML = '<p>No fragments found</p>';
+      return;
+    }
+    console.log('data before screen', data);
+    fragmentContainerDelete.innerHTML = JSON.stringify(data);
   });
 
   // Drag-and-Drop Handlers

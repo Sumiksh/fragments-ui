@@ -272,3 +272,23 @@ export async function getFragments(user) {
     alert('An error occurred while processing your request.');
   }
 }
+
+export async function deleteFragment(user, fragmentId) {
+  try {
+    const response = await fetch(`${apiUrl}/v1/fragments/${fragmentId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${user.idToken}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`${response.status} ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log('Response data:', data);
+    return data;
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred while processing your request.');
+  }
+}
