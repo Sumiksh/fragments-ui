@@ -98,10 +98,6 @@ async function init() {
       img.style.maxWidth = '100%';
       // Append the image to the fragment container
       fragmentContainerInd.appendChild(img);
-      // Optional: Revoke the object URL to free up memory after the image is loaded
-      img.onload = function () {
-        URL.revokeObjectURL(imageUrl);
-      };
     } else {
       console.log('newData', newData);
       fragmentContainerInd.innerText = JSON.stringify(newData);
